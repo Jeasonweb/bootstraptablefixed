@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+ <meta charset="utf-8" />
+ <title></title>
+ <!--必须的css引用-->
+ <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css"/>
+ 
+ <link rel="stylesheet" type="text/css" href="js/bootstrap-table/bootstrap-table.min.css"/>
+ <link rel="stylesheet" type="text/css" href="js/bootstrap-table/bootstrap-table-fixed-columns.css"/>
+ <style type="text/css">
+ 	.fixed-table-header-columns,
+	.fixed-table-body-columns {
+	 position: absolute;
+	 background-color: #fff;
+	 display: none;
+	 box-sizing: border-box;
+	 overflow: hidden;
+	}
+	 .fixed-table-header-columns .table,
+	 .fixed-table-body-columns .table {
+	  border-right: 1px solid #ddd;
+	 }
+	  .fixed-table-header-columns .table.table-no-bordered,
+	  .fixed-table-body-columns .table.table-no-bordered {
+	   border-right: 1px solid transparent;
+	  }
+	 .fixed-table-body-columns table {
+	  position: absolute;
+	  animation: none;
+	 }
+	.bootstrap-table .table-hover > tbody > tr.hover > td {
+	 	background-color: #f5f5f5;
+	 }
+ </style>
+ 
+</head>
+<body>
+ <div class="panel-body" style="padding-bottom:0px;">  <
+  <div id="toolbar" class="btn-group">
+   <button id="btn_add" type="button" class="btn btn-success">
+    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增
+   </button>
+  </div>
+  <table id="tb_user"></table>
+ </div>
+ <!--新增或者编辑的弹出框-->
+ <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+   <div class="modal-content">
+    <div class="modal-header">
+     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+     <h4 class="modal-title" id="myModalLabel">操作</h4>
+    </div>
+    <div class="modal-body">
+     <div class="row" style="padding:10px;">
+      <label class="control-label col-xs-2">姓名</label>
+      <div class="col-xs-10">
+       <input type="text" name="Name" class="form-control" placeholder="姓名">
+      </div>
+     </div>
+     <div class="row" style="padding:10px;">
+      <label class="control-label col-xs-2">年龄</label>
+      <div class="col-xs-10">
+       <input type="text" name="Age" class="form-control" placeholder="年龄">
+      </div>
+     </div>
+     <div class="row" style="padding:10px;">
+      <label class="control-label col-xs-2">学校</label>
+      <div class="col-xs-10">
+       <input type="text" name="School" class="form-control" placeholder="学校">
+      </div>
+     </div>
+     <div class="row" style="padding:10px;">
+      <label class="control-label col-xs-2">家庭住址</label>
+      <div class="col-xs-10">
+       <input type="text" name="Address" class="form-control" placeholder="学校">
+      </div>
+     </div>
+     <div class="row" style="padding:10px;">
+      <label class="control-label col-xs-2">备注</label>
+      <div class="col-xs-10">
+       <textarea class="form-control" placeholder="备注" name="Remark"></textarea>
+      </div>
+     </div>
+    </div>
+    <div class="modal-footer">
+     <button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>关闭</button>
+     <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>保存</button>
+    </div>
+   </div>
+  </div>
+ </div>
+  <!--必须的js文件-->
+  <script src="js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+  <script src="js/bootstrap-table/bootstrap-table.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/bootstrap-table/bootstrap-table-zh-CN.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/bootstrap-table/bootstrap-table-fixed-columns.js" type="text/javascript" charset="utf-8"></script>
+ 
+  <script type="text/javascript">
+   //页面加载完成之后
+   var data = [
+    { Id: 1, Name: 'Jim', Age: 30, School: '光明小学', Address: '北京市光明小学旁', Remark: 'My Name is Jim Green' },
+    { Id: 2, Name: 'Kate', Age: 30, School: '光明小学', Address: '深圳市', Remark: 'My Name is Jim Green' },
+    { Id: 3, Name: 'Lucy', Age: 30, School: '光明小学', Address: '广州天河机场', Remark: 'My Name is Jim Green' },
+    { Id: 4, Name: 'Lilei', Age: 30, School: '光明小学', Address: '北京市光明小学旁', Remark: 'My Name is Jim Green' },
+    { Id: 5, Name: 'Lintao', Age: 30, School: '光明小学', Address: '北京市光明小学旁', Remark: 'My Name is Jim Green' },
+    { Id: 6, Name: 'Lily', Age: 30, School: '光明小学', Address: '北京市光明小学旁', Remark: 'My Name is Jim Green' },
+    { Id: 7, Name: 'Hanmeimei', Age: 30, School: '光明小学', Address: '北京市光明小学旁', Remark: 'My Name is Jim Green' },
+    { Id: 8, Name: '张三', Age: 46, School: '光明小学', Address: '北京市光明小学旁', Remark: 'My Name is Jim Green' },
+    { Id: 9, Name: '李四', Age: 23, School: '光明小学', Address: '北京市光明小学旁', Remark: 'My Name is Jim Green' },
+    { Id: 10, Name: '王五', Age: 33, School: '光明小学', Address: '北京市光明小学旁', Remark: 'My Name is Jim Green' },
+    { Id: 11, Name: '赵六', Age: 22, School: '光明小学', Address: '北京市光明小学旁', Remark: 'My Name is Jim Green' },
+    { Id: 12, Name: 'Polly', Age: 300, School: '光明小学', Address: '北京市光明小学旁', Remark: 'My Name is Jim Green' },
+    { Id: 13, Name: 'Uncle', Age: 50, School: '光明小学', Address: '北京市光明小学旁', Remark: 'My Name is Jim Green' },
+   ];
+   var childData = [
+    { SourceField: 'A', BackField: 'BB' },
+    { SourceField: 'CC', BackField: 'UU' },
+    { SourceField: 'DD', BackField: 'J' },
+   ];
+   $(function () {
+    //表格的初始化
+    $('#tb_user').bootstrapTable({
+     data: data,       //直接从本地数据初始化表格
+     method: 'get',      //请求方式（*）
+     toolbar: '#toolbar',    //工具按钮用哪个容器
+     striped: true,      //是否显示行间隔色
+     cache: false,      //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+     pagination: true,     //是否显示分页（*）
+     sortable: false,      //是否启用排序
+     sortOrder: "asc",     //排序方式
+     queryParams: function (params) {
+      return params;
+     },         //传递参数（*）
+     sidePagination: "client",   //分页方式：client客户端分页，server服务端分页（*）
+     pageNumber: 1,      //初始化加载第一页，默认第一页
+     pageSize: 5,      //每页的记录行数（*）
+     pageList: [10, 25, 50, 100],  //可供选择的每页的行数（*）
+     search: true,      //是否显示表格搜索，此搜索是客户端搜索，不会进服务端，所以，个人感觉意义不大
+     strictSearch: true,
+     showColumns: true,     //是否显示所有的列
+     showRefresh: true,     //是否显示刷新按钮
+     minimumCountColumns: 2,    //最少允许的列数
+     height:400,
+   selectItemName: 'parentItem',
+     fixedColumns: true,
+     fixedNumber: 3,
+     //注册加载子表的事件。注意下这里的三个参数！
+     onExpandRow: function (index, row, $detail) {
+      InitSubTable(index, row, $detail);
+     },
+     columns: [{
+      checkbox: true
+     }, {
+      field: 'Name',
+      title: '姓名',
+width:200
+     }, {
+      field: 'Age',
+      title: '年龄',
+width:200
+     }, {
+      field: 'School',
+      title: '毕业院校',
+width:200
+     }, {
+      field: 'Address',
+      title: '家庭住址',
+width:100
+     }, {
+      field: 'Remark',
+      title: '备注',
+width:100
+     }, 
+ {
+      field: 'Remark',
+      title: '备注',
+width:100
+     }, {
+      field: 'Remark',
+      title: '备注',
+width:100
+     }, {
+      field: 'Remark',
+      title: '备注',
+width:100
+     }, {
+      field: 'Remark',
+      title: '备注',
+width:100
+     }, {
+      field: 'Remark',
+      title: '备注',
+width:100
+     },{
+      field: 'Remark',
+      title: '备注',
+width:100
+     },{
+      field: 'Remark',
+      title: '备注',
+width:100
+     },{
+      field: 'Remark',
+      title: '备注',
+width:100
+     },{
+      field: 'Remark',
+      title: '备注',
+width:100
+     },{
+      field: 'Remark',
+      title: '备注',
+width:100
+     },{
+      field: 'Remark',
+      title: '备注',
+width:100
+     },{
+      field: 'Remark',
+      title: '备注',
+width:100
+     },{
+      field: 'Remark',
+      title: '备注',
+width:100
+     },{
+      field: 'Remark',
+      title: '备注',
+width:100
+     },{
+      field: 'Remark',
+      title: '备注',
+width:100
+     },{
+      field: 'Remark',
+      title: '备注',
+width:100
+     },{
+      field: 'Remark',
+      title: '备注',
+width:100
+     },{
+      field: 'Remark',
+      title: '备注',
+width:100
+     },{
+      field: 'Remark',
+      title: '备注',
+width:100
+     },{
+      field: 'Remark',
+      title: '备注',
+width:100
+     },{
+      field: 'Remark',
+      title: '备注',
+width:100
+     },{
+      field: 'Remark',
+      title: '备注',
+width:100
+     },{
+      field: 'Remark',
+      title: '备注',
+width:100
+     },{
+      field: 'Remark',
+      title: '备注',
+width:100
+     },{
+      field: 'Remark',
+      title: '备注',
+width:100
+     },{
+      title: '操作',
+width:200,
+      formatter: function (value, row, index) {//这里的三个参数：value表示当前行当前列的值；row表示当前行的数据；index表示当前行的索引（从0开始）。
+       var html = '<button type="button" onclick="editModel('+row.Id+')" class="btn btn-primary"><span class="glyphicon glyphicon-pencil" aria- hidden="true" ></span >编辑</button >  ' +
+          '<button type="button" onclick="deleteModel(' + row.Id + ')" class="btn btn-danger"><span class="glyphicon glyphicon-remove" aria- hidden="true" ></span >删除</button >';
+       return html;
+      }
+     }],
+     onEditableSave: function (field, row, oldValue, $el) {
+      alert("更新保存事件，原始值为" + oldValue);
+      //$.ajax({
+      // type: "post",
+      // url: "/Editable/Edit",
+      // data: row,
+      // dataType: 'JSON',
+      // success: function (data, status) {
+      //  if (status == "success") {
+      //   alert('提交数据成功');
+      //  }
+      // },
+      // error: function () {
+      //  alert('编辑失败');
+      // },
+      // complete: function () {
+      // }
+      //});
+     }
+    });
+    //新增事件
+    $("#btn_add").on('click', function () {
+$('#tb_user').bootstrapTable("resetView");
+     //弹出模态框
+     $("#myModal").modal();
+     //给弹出框里面的各个文本框赋值
+     $("#myModal input").val("");
+     $("#myModal textarea").val("");
+    });
+   });
+   //加载子表
+   var InitSubTable = function (index, row, $detail) {
+    var parentid = row.MENU_ID;
+    var cur_table = $detail.html('<table></table>').find('table');
+    //子表的初始化和父表完全相同
+    $(cur_table).bootstrapTable({
+     //url: '/api/MenuApi/GetChildrenMenu',
+     data: childData,
+     method: 'get',
+     queryParams: { strParentID: parentid },
+     ajaxOptions: { strParentID: parentid },
+     clickToSelect: true,
+     uniqueId: "MENU_ID",
+     pageSize: 10,
+     pageList: [10, 25],
+   selectItemName: 'childItem'+index,
+   checkboxHeader:false,
+     columns: [{
+      checkbox: true
+     }, {
+       field: 'SourceField',
+      title: '源端字段'
+     }, {
+      field: 'BackField',
+      title: '备端字段'
+     }, {
+      field: 'BackField',
+      title: '备端字段'
+     }, {
+      field: 'BackField',
+      title: '备端字段'
+     }, {
+      field: 'BackField',
+      title: '备端字段'
+     }, {
+      field: 'BackField',
+      title: '备端字段'
+     }, {
+      field: 'BackField',
+      title: '备端字段'
+     }, {
+      field: 'BackField',
+      title: '备端字段'
+     }, {
+      field: 'BackField',
+      title: '备端字段'
+     }, {
+      field: 'BackField',
+      title: '备端字段'
+     }, {
+      field: 'BackField',
+      title: '备端字段'
+     }, {
+      field: 'BackField',
+      title: '备端字段'
+     }, {
+      field: 'BackField',
+      title: '备端字段'
+     }, {
+      field: 'BackField',
+      title: '备端字段'
+     }, {
+      field: 'BackField',
+      title: '备端字段'
+     }, {
+      field: 'BackField',
+      title: '备端字段'
+     }, {
+      field: 'BackField',
+      title: '备端字段'
+     }, {
+      field: 'BackField',
+      title: '备端字段'
+     }, {
+      field: 'BackField',
+      title: '备端字段'
+     }, {
+      field: 'BackField',
+      title: '备端字段'
+     }, {
+      field: 'BackField',
+      title: '备端字段'
+     }, {
+      field: 'BackField',
+      title: '备端字段'
+     }, {
+      field: 'BackField',
+      title: '备端字段'
+     }, {
+      field: 'BackField',
+      title: '备端字段'
+     }, {
+      field: 'BackField',
+      title: '备端字段'
+     }, {
+      field: 'BackField',
+      title: '备端字段'
+     }],
+     //无线循环取子表，直到子表里面没有记录
+     onExpandRow: function (index, row, $Subdetail) {
+      //oInit.InitSubTable(index, row, $Subdetail);
+     }
+    });
+   };
+   //编辑事件
+   var editModel = function (id) {
+    //根据当前行的id获取当前的行数据
+    var row = $("#tb_user").bootstrapTable('getRowByUniqueId', id);
+    //弹出模态框
+    $("#myModal").modal();
+    //给弹出框里面的各个文本框赋值
+    $("#myModal input[name='Name']").val(row.Name);
+    $("#myModal input[name='Age']").val(row.Age);
+    $("#myModal input[name='School']").val(row.School);
+    $("#myModal input[name='Address']").val(row.Address);
+    $("#myModal textarea[name='Remark']").val(row.Remark);
+   }
+   //删除事件
+   var deleteModel = function (id) {
+    alert("删除id为" + id + "的用户");
+   }
+  </script>
+</body>
+</html>
